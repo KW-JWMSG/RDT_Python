@@ -20,7 +20,10 @@ class UdpServer(threading.Thread):
         while self.recv():
             if(not self.rdtCtrol.isRunning()):
                 break
+        self.close()
 
+    def close(self):
+        self.sock.close()
 
     def recv(self):
         try:

@@ -19,6 +19,11 @@ class UdpClient(threading.Thread):
         if self.send():
             while not self.recv():
                 pass
+        self.close()
+
+    def close(self):
+        self.sock.close()
+
 
     def send(self):
         self.sock.sendto(self.data, (self.bind, self.port))
@@ -29,11 +34,12 @@ class UdpClient(threading.Thread):
         try:
             data, addr = self.sock.recvfrom(1024)
             self.rdtCtrol.recv(data)
-        except socket.timeout:
-            print("TIME_OUT!", "다시 수신 받습니다.")
-            return False
         except ConnectionResetError:
             print("CONNECTION_ERROR", "SERVER 가 켜져있지 않거나, 인터넷 통신에 문제가 존재합니다.")
+            self.close(self)
+            return False
+        except socket.timeout:
+            print("TIME_OUT!", "다시 수신 받습니다.")
             return False
         return True
             
