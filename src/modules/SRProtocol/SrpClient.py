@@ -16,7 +16,6 @@ class SrpClient(threading.Thread):
     def run(self):
         while self.rdtCtrol.isRunning():
             try:
-
                 self.poolCheck()
                 struct =  self.rdtCtrol.struct_pool.pop(0)
                 if(struct == None):

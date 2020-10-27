@@ -1,16 +1,18 @@
 from ..UdpDeliver.UdpClient import UdpClient
 from .RdtStruct import RdtStruct
 from ..SRProtocol.SrpClient import SrpClient
+from ..GBNProtocol.GbnClient import GbnClient
 
 _RTT = 60000 #Milli Second
 _DEFAULT_TIMEOUT_SEC = _RTT / 1000   #Second
 
 class RdtClient:
-    def __init__(self, server_host, server_port, windows_size, message_pool, timeout = _DEFAULT_TIMEOUT_SEC):
+    def __init__(self, server_host, server_port, windows_size, message_pool, timeout = _DEFAULT_TIMEOUT_SEC, buffer_type="SR"):
         self.server_host = server_host
         self.server_port = server_port
         self.windows_size = windows_size
         self.timeout = timeout
+        self.buffer_type = buffer_type
         self.udp_pool = []
 
         
@@ -21,14 +23,21 @@ class RdtClient:
         self.is_running = True
 
         self.srpClient = SrpClient(message_pool,self,windows_size)
+        self.gbnClient = GbnClient(message_pool,self,windows_size)
+
+        if(buffer_type == "SR"):
+            self.deliveryClient = self.srpClient
+        else:
+            self.deliveryClient = self.gbnClient
+
         self.start()
 
     def start(self):
-        self.srpClient.start()
+        self.deliveryClient.start()
         
     def recv(self,data):
         recv_struct = RdtStruct(dumps=data)
-        self.srpClient.delivered(recv_struct)
+        self.deliveryClient.delivered(recv_struct)
 
     def send(self,send_struct):
         send_data = send_struct.toSerialize()

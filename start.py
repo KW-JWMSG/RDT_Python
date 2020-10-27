@@ -9,7 +9,7 @@ def main():
     if(sys.argv[1] == 'server'):
         sv = Server(config)
     elif(sys.argv[1] == 'client'):
-        cl = Client(config, range(400))
+        cl = Client(config, range(51))
 
 if __name__ == '__main__':
     main()

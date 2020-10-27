@@ -29,6 +29,7 @@ class UdpServer(threading.Thread):
             self.rdtCtrol.recv(data)
         except socket.timeout:
             print("TIME_OUT!", "접속된 클라이언트가 없어, 연결을 종료합니다.")
+            self.rdtCtrol.isRunning(False)
             return False
         return True
     
