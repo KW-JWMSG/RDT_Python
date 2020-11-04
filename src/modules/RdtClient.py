@@ -1,7 +1,8 @@
 from DataLayer import DataLayer
 from UdpClient import UdpClient
 import concurrent.futures
-
+import time
+import sys
 
 class PacketLossError(Exception):
     def __init__(self):
@@ -48,22 +49,27 @@ class RdtClient:
                 self.recv()
                 break
             except concurrent.futures.TimeoutError:
-                print('TimeOUT',self.timeout_cnt+1)
+                #print('TimeOUT',self.timeout_cnt+1)
                 self.timeout_cnt += 1
             except PacketLossError:
-                print('PacketLoss',self.packetloss_cnt+1)
+                #print('PacketLoss',self.packetloss_cnt+1)
                 self.packetloss_cnt += 1
 
 
 if __name__=='__main__':
-    
-    messages = ['message-'+str(i) for i in range(10000)]
-    rc = RdtClient(1)
-    for m in messages:
-        rc.send(message=m)
-    rc.send(message='end',is_end=True)
 
+    startTime =  time.time()
+    rc = RdtClient(10)
+    pki = 0
+    while (time.time()-startTime) <= 100:
+        messages = 'message-'+str(pki)
+        rc.send(message=messages)
+        pki += 1
+    rc.send(message='end',is_end=True)
+    endTime = time.time()
     print("---------------PERFORMENCE---------------")
+    print('START TIME\t:',startTime)
+    print('END TIME\t:',endTime,'(GAP:',endTime-startTime,')')
     print('LAST SEQUENCE\t:',rc.current_sequence -1)
     print('LOSS\t\t:',rc.packetloss_cnt)
     print('TIMEOUT\t\t:',rc.timeout_cnt)
@@ -72,3 +78,5 @@ if __name__=='__main__':
     print("-----------------------------------------")
     
     
+
+

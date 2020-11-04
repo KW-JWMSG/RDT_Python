@@ -1,5 +1,7 @@
 from DataLayer import DataLayer
 from UdpServer import UdpServer
+import time
+import random
 
 
 class PacketLossError(Exception):
@@ -11,11 +13,13 @@ class PacketLossError(Exception):
 
 
 class RdtServer:
-    def __init__(self):
+    def __init__(self,delay_min, delay_max):
         self.data = []
         self.current_sequence = 0
         self.server = UdpServer(self)
         self.server.start()
+        self.delay_min = delay_min
+        self.delay_max = delay_max
 
     def deliver(self, dataLayer):
         if(dataLayer.is_err):
@@ -30,6 +34,8 @@ class RdtServer:
         ackLayer = DataLayer(sequence=self.current_sequence,
                              is_ack=True, is_err=False, data="SERVER_RECEIVE")
         self.current_sequence += 1
+        delay_time = random.randint(self.delay_min,self.delay_max) / 1000
+        time.sleep(delay_time)
         return ackLayer
 
     def recv(self, data):
@@ -48,4 +54,4 @@ class RdtServer:
 
 
 if __name__ == '__main__':
-    rs = RdtServer()
+    rs = RdtServer(80,120)
