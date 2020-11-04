@@ -22,6 +22,10 @@ class RdtServer:
         self.delay_max = delay_max
 
     def deliver(self, dataLayer):
+        #print(dataLayer.sequence, dataLayer.data,self.current_sequence)
+        delay_time = random.randint(self.delay_min,self.delay_max) / 1000
+        if delay_time != 0:
+            time.sleep(delay_time)
         if(dataLayer.is_err):
             return DataLayer(sequence=self.current_sequence, is_ack=True, is_err=True, data="SERVER_ERROR_LOS")
         if(dataLayer.is_end):
@@ -34,8 +38,7 @@ class RdtServer:
         ackLayer = DataLayer(sequence=self.current_sequence,
                              is_ack=True, is_err=False, data="SERVER_RECEIVE")
         self.current_sequence += 1
-        delay_time = random.randint(self.delay_min,self.delay_max) / 1000
-        time.sleep(delay_time)
+        self.data.append(dataLayer)
         return ackLayer
 
     def recv(self, data):
@@ -54,4 +57,4 @@ class RdtServer:
 
 
 if __name__ == '__main__':
-    rs = RdtServer(80,120)
+    rs = RdtServer(0,0)
