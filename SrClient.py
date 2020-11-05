@@ -55,10 +55,10 @@ class SrClient():
                 dataLayer = DataLayer(dumps=data)
                 self.deliver(dataLayer,buff_idx)
             except concurrent.futures.TimeoutError:
-                print('TimeOUT',self.timeout_cnt+1)
+                #print('TimeOUT',self.timeout_cnt+1)
                 self.timeout_cnt += 1
             except PacketLossError:
-                print('PacketLoss',self.packetloss_cnt+1)
+                #print('PacketLoss',self.packetloss_cnt+1)
                 self.packetloss_cnt += 1
             
     def resend(self):
