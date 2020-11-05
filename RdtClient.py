@@ -27,6 +27,7 @@ class RdtClient:
         self.sended_cnt = 0
         self.lossrate = lossrate
         self.startTime = time.time()
+        self.limit_cnt = limit_cnt
 
     def deliver(self, dataLayer):
         #print(dataLayer.sequence, dataLayer.data)
@@ -59,7 +60,7 @@ class RdtClient:
 
     def send(self, message='msg', is_end=False):
         while True:
-            if(time.time() - self.startTime > limit_cnt):
+            if(time.time() - self.startTime > self.limit_cnt):
                 break
             is_error = ((self.sended_cnt % self.lossrate) == 0)
             dataLayer = DataLayer(sequence=self.current_sequence,
