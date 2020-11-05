@@ -79,7 +79,7 @@ def sr_perform_graph_client(max_interval, min_interval, limit_time, s_windowsize
 
 
 if __name__ == '__main__':
-    result = rdt_perform_graph_client(10,10,100,8,12)
+    result = rdt_perform_graph_client(10,10,10,80,120)
     # result = gbn_perform_graph_client(10,10,5,8,12,50)
     # result = rdt_perform_graph_client(10,10,5,8,12)
     plt_x = [1/r['lossrate'] for r in result]

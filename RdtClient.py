@@ -15,7 +15,7 @@ class PacketLossError(Exception):
 
 
 class RdtClient:
-    def __init__(self,  max_interval=12, min_interval=8, lossrate=1000):
+    def __init__(self,  max_interval=12, min_interval=8, lossrate=1000, limit_cnt=100):
         self.data = []
         self.current_sequence = 0
         self.client = UdpClient(self)
@@ -26,6 +26,7 @@ class RdtClient:
         self.packetdup_cnt = 0
         self.sended_cnt = 0
         self.lossrate = lossrate
+        self.startTime = time.time()
 
     def deliver(self, dataLayer):
         #print(dataLayer.sequence, dataLayer.data)
@@ -58,6 +59,8 @@ class RdtClient:
 
     def send(self, message='msg', is_end=False):
         while True:
+            if(time.time() - self.startTime > limit_cnt):
+                break
             is_error = ((self.sended_cnt % self.lossrate) == 0)
             dataLayer = DataLayer(sequence=self.current_sequence,
                                   is_ack=False, is_err=is_error, is_end=False,  data=message)
