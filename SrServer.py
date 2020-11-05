@@ -3,7 +3,7 @@ from UdpServer import UdpServer
 import time
 import random
 import threading
-
+import sys
 
 class PacketLossError(Exception):
     def __init__(self):
@@ -80,5 +80,5 @@ class SrServer(threading.Thread):
 
 
 if __name__ == '__main__':
-    rs = SrServer(50,0,0)
+    rs = SrServer(int(sys.argv[3]),int(sys.argv[1]),int(sys.argv[2]))
     rs.start()

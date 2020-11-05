@@ -99,8 +99,8 @@ class SrClient():
 if __name__=='__main__':
     winsize = 50
     limit_cnt = 10
-    max_interval = 12
-    min_interval = 8
+    max_interval = 10
+    min_interval = 10
 
     startTime =  time.time()
     gc = SrClient(winsize=winsize,limit_cnt=limit_cnt,max_interval=max_interval,min_interval=min_interval)

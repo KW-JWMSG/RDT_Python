@@ -2,6 +2,7 @@ from DataLayer import DataLayer
 from UdpServer import UdpServer
 import time
 import random
+import sys
 
 
 class PacketLossError(Exception):
@@ -57,4 +58,4 @@ class RdtServer:
 
 
 if __name__ == '__main__':
-    rs = RdtServer(0,0)
+    rs = RdtServer(int(sys.argv[1]),int(sys.argv[2]))

@@ -70,8 +70,8 @@ class RdtClient:
 
 if __name__ == '__main__':
     limit_cnt = 100
-    max_interval = 8
-    min_interval = 12
+    max_interval =10
+    min_interval = 10
 
     startTime = time.time()
     rc = RdtClient(max_interval=max_interval,min_interval=min_interval)
